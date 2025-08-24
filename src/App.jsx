@@ -3,10 +3,10 @@ import { Switch, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
-import Products from './components/Products';
-import SideBar from './components/SideBar';
-import Login from './components/Login';
 
+
+import Login from './components/Login';
+import Success from "./components/Success";
 import './App.css';
 import './components/Layout.css';
 import ErrorPage from './components/ErrorPage';
@@ -24,6 +24,9 @@ function App() {
           <Route exact path="/main">
             <SideBar />
             <Products />
+          </Route>
+          <Route exact path="/success">
+            <Success />
           </Route>
           <Route exact path="/error">
             <ErrorPage />
