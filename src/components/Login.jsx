@@ -19,8 +19,10 @@ const initialForm = {
 };
 
 const errorMessages = {
-  email: 'Please enter a valid email address',
-  password: 'Password must be at least 4 characters long',
+  email: "Please enter a valid email address",
+  password:
+    "Password must be at least 8 chars and include upper/lowercase, a number and a symbol",
+  terms: "You must accept the terms to continue",
 };
 
 export default function Login() {
@@ -40,44 +42,30 @@ export default function Login() {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
-  useEffect(() => {
-    if (
-      validateEmail(form.email) &&
-      form.password.trim().length >= 4 &&
-      form.terms
-    ) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
-  }, [form]);
+
+  const validatePassword = (pwd) =>
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/.test(pwd);
+  
+   useEffect(() => {
+     const ok =
+       !!validateEmail(form.email) &&
+       validatePassword(form.password) &&
+       form.terms;
+     setIsValid(ok);
+   }, [form]);
 
   const handleChange = (event) => {
-    let { name, value, type } = event.target;
-    value = type === 'checkbox' ? event.target.checked : value;
-    setForm({ ...form, [name]: value });
-    if (name === 'email') {
-      if (validateEmail(value)) {
-        setErrors({ ...errors, [name]: false });
-      } else {
-        setErrors({ ...errors, [name]: true });
-      }
+    let { name, value, type, checked } = event.target;
+    value = type === "checkbox" ? checked : value;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (name === "email") {
+      setErrors((prev) => ({ ...prev, email: !validateEmail(value) }));
     }
-
-    if (name === 'password') {
-      if (value.trim().length >= 4) {
-        setErrors({ ...errors, [name]: false });
-      } else {
-        setErrors({ ...errors, [name]: true });
-      }
+    if (name === "password") {
+      setErrors((prev) => ({ ...prev, password: !validatePassword(value) }));
     }
-
-    if (name === 'terms') {
-      if (value) {
-        setErrors({ ...errors, [name]: false });
-      } else {
-        setErrors({ ...errors, [name]: true });
-      }
+    if (name === "terms") {
+      setErrors((prev) => ({ ...prev, terms: !value }));
     }
   };
 
