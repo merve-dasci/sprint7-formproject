@@ -44,10 +44,10 @@ export default function Login() {
   };
 
   const validatePassword = (pwd) =>
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/.test(pwd);
-  
+     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/.test(pwd);
+
    useEffect(() => {
-     const ok =
+      const ok =
        !!validateEmail(form.email) &&
        validatePassword(form.password) &&
        form.terms;
